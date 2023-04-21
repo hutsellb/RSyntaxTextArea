@@ -261,13 +261,13 @@ public class SyntaxScheme implements Cloneable, TokenTypes {
 	 * @return The syntax scheme.
 	 * @throws IOException If an IO error occurs.
 	 */
-	public static SyntaxScheme load(Font baseFont, InputStream in)
-									throws IOException {
-		if (baseFont==null) {
-			baseFont = RSyntaxTextArea.getDefaultFont();
-		}
-		return SyntaxSchemeLoader.load(baseFont, in);
-	}
+//	public static SyntaxScheme load(Font baseFont, InputStream in)
+//									throws IOException {
+//		if (baseFont==null) {
+//			baseFont = RSyntaxTextArea.getDefaultFont();
+//		}
+//		return SyntaxSchemeLoader.load(baseFont, in);
+//	}
 
 
 	/**
@@ -629,22 +629,22 @@ public class SyntaxScheme implements Cloneable, TokenTypes {
 			scheme = new SyntaxScheme(baseFont);
 		}
 
-		public static SyntaxScheme load(Font baseFont, InputStream in)
-				throws IOException {
-			SyntaxSchemeLoader parser;
-			try {
-				XMLReader reader = XMLReaderFactory.createXMLReader();
-				parser = new SyntaxSchemeLoader(baseFont);
-				parser.baseFont = baseFont;
-				reader.setContentHandler(parser);
-				InputSource is = new InputSource(in);
-				is.setEncoding("UTF-8");
-				reader.parse(is);
-			} catch (SAXException se) {
-				throw new IOException(se.toString());
-			}
-			return parser.scheme;
-		}
+//		public static SyntaxScheme load(Font baseFont, InputStream in)
+//				throws IOException {
+//			SyntaxSchemeLoader parser;
+//			try {
+//				XMLReader reader = XMLReaderFactory.createXMLReader();
+//				parser = new SyntaxSchemeLoader(baseFont);
+//				parser.baseFont = baseFont;
+//				reader.setContentHandler(parser);
+//				InputSource is = new InputSource(in);
+//				is.setEncoding("UTF-8");
+//				reader.parse(is);
+//			} catch (SAXException se) {
+//				throw new IOException(se.toString());
+//			}
+//			return parser.scheme;
+//		}
 
 		@Override
 		public void startElement(String uri, String localName, String qName,

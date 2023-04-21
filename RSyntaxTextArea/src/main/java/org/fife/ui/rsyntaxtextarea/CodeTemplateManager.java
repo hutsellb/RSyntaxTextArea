@@ -241,10 +241,14 @@ public class CodeTemplateManager {
 		boolean wasSuccessful = true;
 		for (CodeTemplate template : templates) {
 			File xmlFile = new File(directory, template.getID() + ".xml");
-			try {
-				XMLEncoder e = new XMLEncoder(new BufferedOutputStream(
-										new FileOutputStream(xmlFile)));
-				e.writeObject(template);
+			try (FileOutputStream fos = new FileOutputStream(xmlFile);
+                                BufferedOutputStream bos = new BufferedOutputStream(fos);
+                                XMLEncoder e = new XMLEncoder(bos)) {
+                                
+				//XMLEncoder e = new XMLEncoder(new BufferedOutputStream(
+				//						new FileOutputStream(xmlFile)));
+                                        
+                                e.writeObject(template);
 				e.close();
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
@@ -266,49 +270,52 @@ public class CodeTemplateManager {
 	 * @return The new number of templates in this template manager, or
 	 *         <code>-1</code> if the specified directory does not exist.
 	 */
-	public synchronized int setTemplateDirectory(File dir) {
-
-		if (dir!=null && dir.isDirectory()) {
-
-			this.directory = dir;
-
-			File[] files = dir.listFiles(new XMLFileFilter());
-			int newCount = files==null ? 0 : files.length;
-			int oldCount = templates.size();
-
-			List<CodeTemplate> temp =
-				new ArrayList<>(oldCount + newCount);
-			temp.addAll(templates);
-
-			for (int i=0; i<newCount; i++) {
-				try {
-					XMLDecoder d = new XMLDecoder(new BufferedInputStream(
-						new FileInputStream(files[i])));
-					Object obj = d.readObject();
-					if (!(obj instanceof CodeTemplate)) {
-						d.close();
-						throw new IOException("Not a CodeTemplate: " +
-										files[i].getAbsolutePath());
-					}
-					temp.add((CodeTemplate)obj);
-					d.close();
-				} catch (/*IO, NoSuchElement*/Exception e) {
-					// NoSuchElementException can be thrown when reading
-					// an XML file not in the format expected by XMLDecoder.
-					// (e.g. CodeTemplates in an old format).
-					e.printStackTrace();
-				}
-			}
-			templates = temp;
-			sortTemplates();
-
-			return getTemplateCount();
-
-		}
-
-		return -1;
-
-	}
+//	public synchronized int setTemplateDirectory(File dir) {
+//
+//		if (dir!=null && dir.isDirectory()) {
+//
+//			this.directory = dir;
+//
+//			File[] files = dir.listFiles(new XMLFileFilter());
+//			int newCount = files==null ? 0 : files.length;
+//			int oldCount = templates.size();
+//
+//			List<CodeTemplate> temp =
+//				new ArrayList<>(oldCount + newCount);
+//			temp.addAll(templates);
+//
+//			for (int i=0; i<newCount; i++) {
+//				try ( FileInputStream fis = new FileInputStream(files[i]);
+//                                        BufferedInputStream bis = new BufferedInputStream(fis);
+//                                        XMLDecoder d = new XMLDecoder(bis) ) {
+//                                    
+//					//XMLDecoder d = new XMLDecoder(new BufferedInputStream(
+//					//	new FileInputStream(files[i])));
+//					Object obj = d.readObject();
+//					if (!(obj instanceof CodeTemplate)) {
+//						d.close();
+//						throw new IOException("Not a CodeTemplate: " +
+//										files[i].getAbsolutePath());
+//					}
+//					temp.add((CodeTemplate)obj);
+//					d.close();
+//				} catch (/*IO, NoSuchElement*/Exception e) {
+//					// NoSuchElementException can be thrown when reading
+//					// an XML file not in the format expected by XMLDecoder.
+//					// (e.g. CodeTemplates in an old format).
+//					e.printStackTrace();
+//				}
+//			}
+//			templates = temp;
+//			sortTemplates();
+//
+//			return getTemplateCount();
+//
+//		}
+//
+//		return -1;
+//
+//	}
 
 
 	/**
