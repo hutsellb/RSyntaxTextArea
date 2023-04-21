@@ -607,9 +607,7 @@ public class TextEditorPane extends RSyntaxTextArea implements
 		try (BufferedWriter w = new BufferedWriter(
 			new UnicodeWriter(out, getEncoding()))) {
 			write(w);
-		} finally {
-                    out.close();
-                }
+		}
 	}
 
 

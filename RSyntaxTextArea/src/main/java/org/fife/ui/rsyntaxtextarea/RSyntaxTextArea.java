@@ -1819,13 +1819,7 @@ private boolean fractionalFontMetricsEnabled;
 				lastToken = tokenList;
 			}
 			else {
-                                if (lastToken == null) {
-                                    // print error
-                                    System.out.println("RSyntaxTextArea.getTokenListFor() error: lastToken is null.");
-                                    return tokenList;
-                                } else {
-                                    lastToken.setNextToken(t);
-                                }
+				lastToken.setNextToken(t);
 			}
 			while (lastToken.getNextToken()!=null &&
 					lastToken.getNextToken().isPaintable()) {
@@ -3117,21 +3111,21 @@ private boolean fractionalFontMetricsEnabled;
 	 * @see #setTemplatesEnabled
 	 * @see #saveTemplates
 	 */
-//	public static synchronized boolean setTemplateDirectory(String dir) {
-//		if (getTemplatesEnabled() && dir!=null) {
-//			File directory = new File(dir);
-//			if (directory.isDirectory()) {
-//				return getCodeTemplateManager().
-//						setTemplateDirectory(directory)>-1;
-//			}
-//			boolean created = directory.mkdir();
-//			if (created) {
-//				return getCodeTemplateManager().
-//					setTemplateDirectory(directory)>-1;
-//			}
-//		}
-//		return false;
-//	}
+	public static synchronized boolean setTemplateDirectory(String dir) {
+		if (getTemplatesEnabled() && dir!=null) {
+			File directory = new File(dir);
+			if (directory.isDirectory()) {
+				return getCodeTemplateManager().
+						setTemplateDirectory(directory)>-1;
+			}
+			boolean created = directory.mkdir();
+			if (created) {
+				return getCodeTemplateManager().
+					setTemplateDirectory(directory)>-1;
+			}
+		}
+		return false;
+	}
 
 
 	/**
