@@ -94,39 +94,39 @@ public class Macro {
 	 * @see #saveToFile(String)
 	 * @see #saveToFile(File)
 	 */
-	public Macro(File file) throws IOException {
-
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db;
-		Document doc;
-		try {
-			db = dbf.newDocumentBuilder();
-			//InputSource is = new InputSource(new FileReader(file));
-			InputSource is = new InputSource(new UnicodeReader(
-								new FileInputStream(file), FILE_ENCODING));
-			is.setEncoding(FILE_ENCODING);
-			doc = db.parse(is);//db.parse(file);
-		} catch (Exception e) {
-			e.printStackTrace();
-			String desc = e.getMessage();
-			if (desc==null) {
-				desc = e.toString();
-			}
-			throw new IOException("Error parsing XML: " + desc);
-		}
-
-		macroRecords = new ArrayList<>();
-
-		// Traverse the XML tree.
-		boolean parsedOK = initializeFromXMLFile(doc.getDocumentElement());
-		if (!parsedOK) {
-			name = null;
-			macroRecords.clear();
-			macroRecords = null;
-			throw new IOException("Error parsing XML!");
-		}
-
-	}
+//	public Macro(File file) throws IOException {
+//
+//		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+//		DocumentBuilder db;
+//		Document doc;
+//		try {
+//			db = dbf.newDocumentBuilder();
+//			//InputSource is = new InputSource(new FileReader(file));
+//			InputSource is = new InputSource(new UnicodeReader(
+//								new FileInputStream(file), FILE_ENCODING));
+//			is.setEncoding(FILE_ENCODING);
+//			doc = db.parse(is);//db.parse(file);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			String desc = e.getMessage();
+//			if (desc==null) {
+//				desc = e.toString();
+//			}
+//			throw new IOException("Error parsing XML: " + desc);
+//		}
+//
+//		macroRecords = new ArrayList<>();
+//
+//		// Traverse the XML tree.
+//		boolean parsedOK = initializeFromXMLFile(doc.getDocumentElement());
+//		if (!parsedOK) {
+//			name = null;
+//			macroRecords.clear();
+//			macroRecords = null;
+//			throw new IOException("Error parsing XML!");
+//		}
+//
+//	}
 
 
 	/**
@@ -306,9 +306,9 @@ public class Macro {
 	 *         the output file.
 	 * @see #saveToFile(String)
 	 */
-	public void saveToFile(File file) throws IOException {
-		saveToFile(file.getAbsolutePath());
-	}
+//	public void saveToFile(File file) throws IOException {
+//		saveToFile(file.getAbsolutePath());
+//	}
 
 
 	/**
@@ -321,79 +321,79 @@ public class Macro {
 	 *         the output file.
 	 * @see #saveToFile(File)
 	 */
-	public void saveToFile(String fileName) throws IOException {
-
-		/*
-		 * This method writes the XML document in the following format:
-		 *
-		 * <?xml version="1.0" encoding="UTF-8" ?>
-		 * <macro>
-		 *    <macroName>test</macroName>
-		 *    <action id="default-typed">abcdefg</action>
-		 *    [<action id=...>...</action>]
-		 *    ...
-		 * </macro>
-		 *
-		 */
-
-		try {
-
-			DocumentBuilder db = DocumentBuilderFactory.newInstance().
-											newDocumentBuilder();
-			DOMImplementation impl = db.getDOMImplementation();
-
-			Document doc = impl.createDocument(null, ROOT_ELEMENT, null);
-			Element rootElement = doc.getDocumentElement();
-
-			// Write the name of the macro.
-			Element nameElement = doc.createElement(MACRO_NAME);
-			nameElement.appendChild(doc.createCDATASection(name));
-			rootElement.appendChild(nameElement);
-
-			// Write all actions (the meat) in the macro.
-			for (MacroRecord record : macroRecords) {
-				Element actionElement = doc.createElement(ACTION);
-				actionElement.setAttribute(ID, record.id);
-				if (record.actionCommand!=null &&
-						record.actionCommand.length()>0) {
-					// Remove illegal characters.  I'm no XML expert, but
-					// I'm not sure what I'm doing wrong.  If we don't
-					// strip out chars with Unicode value < 32, our
-					// generator will insert '&#<value>', which will cause
-					// our parser to barf when reading the macro back in
-					// (it says "Invalid XML character").  But why doesn't
-					// our generator tell us the character is invalid too?
-					String command = record.actionCommand;
-					for (int j=0; j<command.length(); j++) {
-						if (command.charAt(j)<32) {
-							command = command.substring(0,j);
-							if (j<command.length()-1) {
-								command += command.substring(j+1);
-							}
-						}
-					}
-					Node n = doc.createCDATASection(command);
-					actionElement.appendChild(n);
-				}
-				rootElement.appendChild(actionElement);
-			}
-
-			// Dump the XML out to the file.
-			StreamResult result = new StreamResult(new File(fileName));
-			DOMSource source = new DOMSource(doc);
-			TransformerFactory transFac = TransformerFactory.newInstance();
-			Transformer transformer = transFac.newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.setOutputProperty(OutputKeys.ENCODING, FILE_ENCODING);
-			transformer.transform(source, result);
-
-		} catch (RuntimeException re) {
-			throw re; // Keep FindBugs happy.
-		} catch (Exception e) {
-			throw new IOException("Error generating XML!");
-		}
-
-	}
+//	public void saveToFile(String fileName) throws IOException {
+//
+//		/*
+//		 * This method writes the XML document in the following format:
+//		 *
+//		 * <?xml version="1.0" encoding="UTF-8" ?>
+//		 * <macro>
+//		 *    <macroName>test</macroName>
+//		 *    <action id="default-typed">abcdefg</action>
+//		 *    [<action id=...>...</action>]
+//		 *    ...
+//		 * </macro>
+//		 *
+//		 */
+//
+//		try {
+//
+//			DocumentBuilder db = DocumentBuilderFactory.newInstance().
+//											newDocumentBuilder();
+//			DOMImplementation impl = db.getDOMImplementation();
+//
+//			Document doc = impl.createDocument(null, ROOT_ELEMENT, null);
+//			Element rootElement = doc.getDocumentElement();
+//
+//			// Write the name of the macro.
+//			Element nameElement = doc.createElement(MACRO_NAME);
+//			nameElement.appendChild(doc.createCDATASection(name));
+//			rootElement.appendChild(nameElement);
+//
+//			// Write all actions (the meat) in the macro.
+//			for (MacroRecord record : macroRecords) {
+//				Element actionElement = doc.createElement(ACTION);
+//				actionElement.setAttribute(ID, record.id);
+//				if (record.actionCommand!=null &&
+//						record.actionCommand.length()>0) {
+//					// Remove illegal characters.  I'm no XML expert, but
+//					// I'm not sure what I'm doing wrong.  If we don't
+//					// strip out chars with Unicode value < 32, our
+//					// generator will insert '&#<value>', which will cause
+//					// our parser to barf when reading the macro back in
+//					// (it says "Invalid XML character").  But why doesn't
+//					// our generator tell us the character is invalid too?
+//					String command = record.actionCommand;
+//					for (int j=0; j<command.length(); j++) {
+//						if (command.charAt(j)<32) {
+//							command = command.substring(0,j);
+//							if (j<command.length()-1) {
+//								command += command.substring(j+1);
+//							}
+//						}
+//					}
+//					Node n = doc.createCDATASection(command);
+//					actionElement.appendChild(n);
+//				}
+//				rootElement.appendChild(actionElement);
+//			}
+//
+//			// Dump the XML out to the file.
+//			StreamResult result = new StreamResult(new File(fileName));
+//			DOMSource source = new DOMSource(doc);
+//			TransformerFactory transFac = TransformerFactory.newInstance();
+//			Transformer transformer = transFac.newTransformer();
+//			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+//			transformer.setOutputProperty(OutputKeys.ENCODING, FILE_ENCODING);
+//			transformer.transform(source, result);
+//
+//		} catch (RuntimeException re) {
+//			throw re; // Keep FindBugs happy.
+//		} catch (Exception e) {
+//			throw new IOException("Error generating XML!");
+//		}
+//
+//	}
 
 
 	/**
